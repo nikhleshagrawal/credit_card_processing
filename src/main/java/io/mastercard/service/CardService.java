@@ -14,14 +14,14 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 @Service
 public class CardService {
-  private CardRepository repository;
+  private final CardRepository repository;
+  private final CreditCardValidation cardValidation;
 
-  public CreditCardResponse addCard(CreditCard card){
-    if(!CardValidation.validateCard(card.getCardNumber())){
+  public CreditCard addCard(CreditCard card){
+    if(!cardValidation.validateCard(card.getCardNumber())){
       throw new CreditCardNotValidException("Credit card not valid");
     }
-    CreditCard creditCard = repository.save(card);
-    return new CreditCardResponse("success", creditCard.toString() + " added");
+    return repository.save(card);
   }
 
   public List<CreditCard> getCards(){

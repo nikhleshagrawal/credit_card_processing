@@ -2,9 +2,7 @@ package io.mastercard.controller;
 
 import io.mastercard.dto.CreditCard;
 import io.mastercard.dto.CreditCardResponse;
-import io.mastercard.exception.CreditCardNotValidException;
 import io.mastercard.service.CardService;
-import io.mastercard.service.CardValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,6 +12,7 @@ import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/v1")
+@CrossOrigin
 public class CreditCardController {
 
   private CardService cardService;
@@ -41,8 +41,9 @@ public class CreditCardController {
       })
   @PostMapping("/creditCards")
   public ResponseEntity<CreditCardResponse> addCreditCard(@Valid @RequestBody CreditCard card){
-      CreditCardResponse cardResponse = cardService.addCard(card);
-      return ResponseEntity.status(HttpStatus.CREATED).body(cardResponse);
+      CreditCard creditCard = cardService.addCard(card);
+      CreditCardResponse creditCardResponse = new CreditCardResponse("success", creditCard.toString() + " added");
+      return ResponseEntity.status(HttpStatus.CREATED).body(creditCardResponse);
   }
 
   @Operation(summary = "This is to fetch All the credit cards")

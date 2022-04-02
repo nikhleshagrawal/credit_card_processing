@@ -1,7 +1,6 @@
 package io.mastercard.service;
 
 import io.mastercard.dto.CreditCard;
-import io.mastercard.dto.CreditCardResponse;
 import io.mastercard.exception.CreditCardNotValidException;
 import io.mastercard.repository.CardRepository;
 import java.util.Arrays;
@@ -24,11 +23,13 @@ class CardServiceTest {
 
   private CardRepository repository;
   private CardService cardService;
+  private CreditCardValidation cardValidation;
 
   @BeforeEach
   void setUp(){
     repository = mock(CardRepository.class);
-    cardService = new CardService(repository);
+    cardValidation = new CreditCardValidationImpl();
+    cardService = new CardService(repository, cardValidation);
   }
 
   @Test
@@ -49,9 +50,8 @@ class CardServiceTest {
     card.setCardLimit(1000L);
     card.setCardNumber("4556737586899855");
     when(repository.save(any(CreditCard.class))).thenReturn(card);
-    CreditCardResponse creditCardResponse = cardService.addCard(card);
-    CreditCardResponse expectedResponse = new CreditCardResponse("success", card.toString() + " added");
-    assertEquals(expectedResponse, creditCardResponse);
+    CreditCard creditCard = cardService.addCard(card);
+    assertEquals(card, creditCard);
   }
 
   @Test
