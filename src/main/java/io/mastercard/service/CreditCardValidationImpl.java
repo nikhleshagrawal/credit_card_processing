@@ -9,20 +9,12 @@ import org.springframework.stereotype.Component;
 public class CreditCardValidationImpl implements CreditCardValidation{
   @Override
   public boolean validateCard(String ccNumber){
-    int sum = 0;
-    boolean alternate = false;
-    for (int i = ccNumber.length() - 1; i >= 0; i--) {
-      int n = Integer.parseInt(ccNumber.substring(i, i + 1));
-      if (alternate){
-        n *= 2;
-        if (n > 9)
-        {
-          n = (n % 10) + 1;
-        }
-      }
-      sum += n;
-      alternate = !alternate;
-    }
-    return (sum % 10 == 0);
+    int [] a =  {ccNumber.length() % 2 == 0 ? 1 : 2};
+    return ccNumber.chars()
+        .map(num-> num - '0')
+        .map(num->num*(a[0]=(a[0]==1?2:1)))
+        .map(num -> num >9 ? num-9:num )
+        .sum() % 10 == 0;
+
   }
 }

@@ -7,5 +7,5 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public interface CreditCardValidation {
-  public boolean validateCard(String ccNumber);
+  boolean validateCard(String ccNumber);
 }

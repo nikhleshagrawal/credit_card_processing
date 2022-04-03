@@ -2,9 +2,7 @@ package io.mastercard.exception.handler;
 
 import io.mastercard.dto.APIError;
 import io.mastercard.exception.CreditCardNotValidException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpHeaders;
@@ -29,9 +27,9 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     APIError apiError = new APIError();
     apiError.setTimeStamp(LocalDateTime.now());
     apiError.setPathUri(servletWebRequest.getDescription(true));
-    apiError.setErrors(Arrays.asList(e.getMessage()));
+    apiError.setErrors(List.of(e.getMessage()));
     apiError.setStatus(HttpStatus.BAD_REQUEST);
-    return new ResponseEntity(apiError, new HttpHeaders(), apiError.getStatus());
+    return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
   }
 
   @Override
@@ -50,6 +48,6 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     apiError.setPathUri(request.getDescription(true));
     apiError.setStatus(HttpStatus.BAD_REQUEST);
     apiError.setErrors(errors);
-    return new ResponseEntity(apiError, headers, apiError.getStatus());
+    return new ResponseEntity<>(apiError, headers, apiError.getStatus());
   }
 }
